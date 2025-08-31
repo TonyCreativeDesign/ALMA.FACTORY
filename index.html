@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>ALMA.FACTORY</title>
+
+    <!-- Polices : Bebas Neue et Roboto -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Préchargement des logos -->
+    <link rel="preload" as="image" href="Images/ALMA-00.png">
+    <link rel="preload" as="image" href="Images/ALMA-01.png">
+
+    <!-- Couleur du navigateur (mise à jour dynamiquement en JS) -->
+    <meta name="theme-color" content="#121212" id="themeColorMeta" />
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Bascule Mode Clair -->
+      <div class="top-actions">
+        <button id="lightModeToggle" class="btn light-mode-toggle" type="button" aria-pressed="false">
+          Mode Clair
+        </button>
+        <button id="muteToggle" class="btn mute-toggle" type="button" aria-pressed="false" aria-label="Activer/Désactiver le son">
+          🔊 Son
+        </button>
+      </div>
+
+      <!-- Header (Logo) : change dynamiquement avec le mode -->
+      <header>
+        <img
+          id="logo"
+          src="Images/ALMA-00.png"
+          alt="Logo ALMA (sombre)"
+          data-dark="Images/ALMA-00.png"
+          data-light="Images/ALMA-01.png"
+          decoding="async"
+          draggable="false"
+        />
+      </header>
+
+      <!-- Live region pour annonces -->
+      <p id="live" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></p>
+
+      <!-- Stats (T-shirts, T-shirts/clic, CPS) -->
+      <div class="stats" role="group" aria-label="Statistiques">
+        <div class="resource">
+          <span>T-Shirts fabriqués :</span>
+          <strong id="tshirtCount">0</strong>
+        </div>
+        <div class="resource">
+          <span>T-Shirts / Clic :</span>
+          <strong id="clickMultiplier">1</strong>
+        </div>
+        <div class="resource">
+          <span>CPS :</span>
+          <strong id="cps">0</strong>
+        </div>
+      </div>
+
+      <!-- Titre principal -->
+      <h1 class="title-game">ALMA.FACTORY</h1>
+
+      <!-- Section principale : clic, barre de progression, tableau de bord -->
+      <div class="main-section">
+        <!-- Action : Bouton de clic -->
+        <div class="main-action">
+          <button id="clickerButton" class="clicker-btn" type="button" aria-label="Fabriquer un T-Shirt">
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/2922/2922510.png"
+              alt=""
+              aria-hidden="true"
+              draggable="false"
+            />
+          </button>
+          <p id="actionLabel">Clique pour fabriquer un t-shirt</p>
+        </div>
+
+        <!-- Barre de progression & Niveaux -->
+        <div class="level-bar-container" aria-label="Progression vers le premier objectif">
+          <div class="level-info">
+            <span id="currentLevelLabel">Niveau 0</span>
+          </div>
+          <div class="progress-bar" aria-hidden="true">
+            <div id="progressFill" class="progress-fill"></div>
+          </div>
+
+          <!-- Tableau de bord stats -->
+          <div class="player-stats">
+            <p>Total de clics : <span id="totalClicks">0</span></p>
+            <p>Total T-shirts cumulés : <span id="totalTshirtsCumul">0</span></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section BOOSTS -->
+      <section class="shop" aria-labelledby="shopTitle">
+        <h2 id="shopTitle">BOOSTS</h2>
+
+        <!-- Chaque upgrade est un vrai bouton accessible -->
+        <button class="upgrade" data-upgrade="atelier" type="button" aria-describedby="u-atelier-desc">
+          <div class="upgrade-info">
+            <p class="upgrade-title">Extension d'Atelier</p>
+            <p id="u-atelier-desc">+1 T-shirt / clic</p>
+          </div>
+          <div class="upgrade-price"><span id="priceAtelier">50</span> T-Shirts</div>
+        </button>
+
+        <button class="upgrade" data-upgrade="machine" type="button" aria-describedby="u-machine-desc">
+          <div class="upgrade-info">
+            <p class="upgrade-title">Machine Automatique</p>
+            <p id="u-machine-desc">+1 T-shirt / seconde</p>
+          </div>
+          <div class="upgrade-price"><span id="priceMachine">200</span> T-Shirts</div>
+        </button>
+
+        <button class="upgrade hidden" data-upgrade="pub" id="pubUpgrade" type="button" aria-describedby="u-pub-desc">
+          <div class="upgrade-info">
+            <p class="upgrade-title">Campagne Publicitaire</p>
+            <p id="u-pub-desc">+50% prod. manuelle (30s)</p>
+          </div>
+          <div class="upgrade-price"><span id="pricePub">300</span> T-Shirts</div>
+        </button>
+
+        <button class="upgrade hidden" data-upgrade="digital" id="digitalUpgrade" type="button" aria-describedby="u-digital-desc">
+          <div class="upgrade-info">
+            <p class="upgrade-title">Campagne Digitale</p>
+            <p id="u-digital-desc">+30% prod. globale (45s)</p>
+          </div>
+          <div class="upgrade-price"><span id="priceDigital">500</span> T-Shirts</div>
+        </button>
+
+        <button class="upgrade hidden" data-upgrade="lab" id="labUpgrade" type="button" aria-describedby="u-lab-desc">
+          <div class="upgrade-info">
+            <p class="upgrade-title">Laboratoire R&amp;D</p>
+            <p id="u-lab-desc">+2 permanent au clic</p>
+          </div>
+          <div class="upgrade-price"><span id="priceLab">800</span> T-Shirts</div>
+        </button>
+
+        <button class="upgrade hidden" data-upgrade="staff" id="staffUpgrade" type="button" aria-describedby="u-staff-desc">
+          <div class="upgrade-info">
+            <p class="upgrade-title">Recrutement</p>
+            <p id="u-staff-desc">+1 CPS permanent</p>
+          </div>
+          <div class="upgrade-price"><span id="priceStaff">1000</span> T-Shirts</div>
+        </button>
+      </section>
+
+      <!-- Bouton Récompense journalière -->
+      <button id="dailyRewardButton" class="btn daily-reward hidden" type="button">
+        Récompense Journalière
+      </button>
+
+      <!-- Bouton Prestige (apparaît après 2e objectif) -->
+      <button id="prestigeButton" class="btn prestige-btn hidden" type="button">
+        Prestige
+      </button>
+
+      <!-- Niveaux -->
+      <section class="achievements" aria-labelledby="achievementsTitle">
+        <h2 id="achievementsTitle">NIVEAU</h2>
+        <ul id="achievementList"></ul>
+      </section>
+
+      <!-- Section de fin (Codes promo, etc.) -->
+      <section id="endGameSection" class="end-game-section hidden" aria-labelledby="endGameTitle">
+        <h2 id="endGameTitle">Félicitations&nbsp;!</h2>
+        <p id="endGameMessage"></p>
+        <button id="continueButton" class="btn continue-btn hidden" type="button">
+          Continuer quand même
+        </button>
+      </section>
+
+      <!-- Zone d'affichage permanent des codes promo -->
+      <section id="codesDisplay" class="codes-display hidden" aria-labelledby="codesTitle">
+        <h2 id="codesTitle">Codes Promo Obtenus</h2>
+        <ul id="codesList"></ul>
+      </section>
+
+      <!-- Boutons en bas : partage + réinitialiser -->
+      <div class="bottom-buttons">
+        <a id="shareButton" class="btn share-btn" href="#" target="_blank" rel="noopener">
+          Partager mes T-Shirts
+        </a>
+        <button id="resetButton" class="btn reset-btn" type="button">
+          Réinitialiser
+        </button>
+      </div>
+    </div>
+
+    <!-- Div cachée : Codes promo (configurable) -->
+    <div
+      id="promoCodes"
+      data-first-code="ALMA10"
+      data-second-code="ALMAGOAT"
+      hidden
+    ></div>
+
+    <!-- Notifications -->
+    <div id="notification" class="notification" role="status" aria-live="polite" aria-atomic="true"></div>
+
+    <noscript>
+      <style>.container{filter:grayscale(1)}</style>
+      <p style="text-align:center;color:#f99;">Activez JavaScript pour jouer à ALMA.FACTORY.</p>
+    </noscript>
+
+    <script src="script.js" defer></script>
+  </body>
+</html>
