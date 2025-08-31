@@ -1,0 +1,263 @@
+/* ==============================================
+   RESET & ACCESSIBILITY
+============================================== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:focus-visible { outline: 2px solid #69f; outline-offset: 2px; }
+.sr-only { position:absolute !important; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
+.hidden { display: none !important; }
+
+/* ==============================================
+   THEME (Sombre par défaut)
+============================================== */
+:root {
+  --bg: #121212;
+  --text: #ffffff;
+  --muted: #cfcfcf;
+
+  --primary: #D32F2F;
+  --secondary: #FFC1CC;
+
+  --card: #1E1E1E;
+  --button: #FFC1CC;
+  --button-hover: #FF80AB;
+
+  --notif: rgba(255, 193, 204, 0.9);
+  --progress-bg: #333;
+  --progress-fill: #D32F2F;
+
+  --shadow: 0 8px 30px rgba(211, 47, 47, 0.35);
+
+  --radius: 14px;
+  --radius-sm: 8px;
+
+  --transition: 180ms ease;
+}
+
+body.light-mode {
+  --bg: #FFFFFF;
+  --text: #121212;
+  --muted: #333;
+
+  --card: #EAEAEA;
+  --button: #FFCDD2;
+  --button-hover: #FF80AB;
+
+  --notif: rgba(255, 193, 204, 0.7);
+  --progress-bg: #ccc;
+  --progress-fill: #D32F2F;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
+
+/* ==============================================
+   BASE
+============================================== */
+html, body { height: 100%; }
+body {
+  font-family: "Roboto", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100svh;
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  transition: background-color var(--transition), color var(--transition);
+}
+
+.container {
+  width: 100%;
+  max-width: 900px;
+  background-color: var(--card);
+  border-radius: var(--radius);
+  padding: 24px;
+  text-align: center;
+  box-shadow: var(--shadow);
+  position: relative;
+}
+
+/* ==============================================
+   TOP ACTIONS
+============================================== */
+.top-actions { display:flex; gap:12px; position:absolute; top: 16px; right: 16px; }
+.btn {
+  appearance: none; border: none; background: var(--button); color: #000;
+  padding: 10px 16px; border-radius: var(--radius-sm); cursor: pointer;
+  box-shadow: 0 2px 8px rgba(211, 47, 47, 0.25);
+  transition: transform var(--transition), background-color var(--transition), opacity var(--transition), box-shadow var(--transition);
+  font-weight: 600; text-decoration: none; display:inline-flex; align-items:center; gap:.35rem;
+}
+.btn:hover { background: var(--button-hover); transform: translateY(-1px); }
+.btn:active { transform: translateY(0); box-shadow: 0 0 0 3px rgba(211,47,47,.2) inset; }
+.btn[aria-disabled="true"], .btn.is-disabled { opacity: .5; cursor:not-allowed; pointer-events:none; }
+
+/* ==============================================
+   LOGO
+============================================== */
+header { margin-top: 28px; margin-bottom: 16px; }
+#logo { width: 200px; height: auto; transition: opacity var(--transition), transform var(--transition); user-select: none; }
+#logo:hover { transform: scale(1.02); }
+
+/* ==============================================
+   STATS
+============================================== */
+.stats { display:flex; justify-content: space-around; gap: 12px; margin-bottom: 24px; }
+.resource {
+  background: var(--card);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  width: 33%;
+  box-shadow: 0 4px 10px rgba(211, 47, 47, 0.25);
+}
+.stats span { font-size: .9rem; color: var(--primary); }
+.stats strong { display:block; font-size: 1.6rem; color: var(--secondary); margin-top: 4px; }
+
+/* ==============================================
+   TITRE
+============================================== */
+.title-game {
+  font-family: "Bebas Neue", ui-serif, system-ui;
+  font-size: clamp(2.2rem, 4vw, 3.2rem);
+  color: var(--primary);
+  margin-bottom: 24px;
+}
+
+/* ==============================================
+   MAIN SECTION
+============================================== */
+.main-section {
+  display:flex; justify-content: space-around; align-items: flex-start; flex-wrap: wrap; gap: 20px;
+  margin-bottom: 24px;
+}
+
+.main-action { text-align:center; }
+
+.clicker-btn {
+  background: var(--button);
+  border: none; border-radius: 50%;
+  width: 150px; height: 150px; cursor: pointer;
+  display:flex; align-items:center; justify-content:center;
+  transition: transform .1s ease, background var(--transition);
+  box-shadow: 0 4px 15px rgba(255, 193, 204, .6);
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+}
+.clicker-btn img { width: 60px; height:auto; pointer-events: none; }
+.clicker-btn:active { transform: scale(.95) rotate(1deg); background: var(--button-hover); }
+#actionLabel { margin-top: 6px; font-size: .9rem; color: var(--muted); }
+
+/* Progression + dashboard */
+.level-bar-container { display:flex; flex-direction:column; width: 340px; align-items:center; gap: 10px; }
+.level-info { font-size: 1.2rem; font-weight: 700; }
+.progress-bar { width: 100%; height: 26px; background: var(--progress-bg); border-radius: 14px; overflow: hidden; box-shadow: inset 0 2px 5px rgba(0,0,0,.35); }
+.progress-fill { height:100%; width:0%; background: var(--progress-fill); transition: width .45s ease; }
+.player-stats { font-size: .9rem; color: var(--text); opacity: .9; }
+
+/* ==============================================
+   SHOP (BOOSTS)
+============================================== */
+.shop {
+  background: var(--card);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  margin-top: 8px;
+}
+.shop h2 { margin-bottom: 12px; color: var(--primary); font-family: "Bebas Neue"; font-size: 2rem; }
+
+.upgrade {
+  width:100%; display:flex; justify-content:space-between; align-items:center; gap: 12px;
+  background: var(--card);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px; margin: 10px 0;
+  cursor: pointer;
+  transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+  box-shadow: 0 2px 8px rgba(211,47,47,.25);
+}
+.upgrade:hover { background: var(--button-hover); transform: translateY(-2px); }
+.upgrade-info { text-align: left; }
+.upgrade-title { font-weight: 700; color: var(--secondary); margin-bottom: 4px; transition: color var(--transition); }
+.upgrade:hover .upgrade-title { color: #000; }
+.upgrade-price { color: var(--text); font-weight: 600; }
+
+.upgrade.is-active { box-shadow: 0 0 0 2px var(--primary) inset; }
+.upgrade.is-locked,
+.upgrade[aria-disabled="true"] { opacity: .6; cursor:not-allowed; pointer-events:none; }
+
+/* ==============================================
+   NOTIFICATION
+============================================== */
+.notification {
+  position: fixed; top: 90px; right: 20px;
+  background: var(--notif); color: #000;
+  padding: 10px 16px; border-radius: var(--radius-sm);
+  opacity: 0; transition: opacity var(--transition), transform var(--transition);
+  z-index: 1000; max-width: 280px; box-shadow: 0 2px 8px rgba(0,0,0,.2);
+  transform: translateY(-8px);
+}
+.notification.show { opacity: 1; transform: translateY(0); }
+
+/* ==============================================
+   NIVEAU / RÉALISATIONS
+============================================== */
+.achievements { background: var(--card); border-radius: var(--radius-sm); padding: 16px; margin-top: 20px; }
+.achievements h2 { margin-bottom: 8px; color: var(--primary); font-family: "Bebas Neue"; font-size: 2rem; }
+.achievements ul { list-style:none; }
+.achievements li {
+  background: var(--bg); border-radius: 6px; padding: 10px 12px; margin-bottom: 8px; color: var(--text);
+  box-shadow: 0 2px 5px rgba(211,47,47,.18);
+  display:flex; justify-content:space-between; align-items:center;
+}
+.achievements li.locked { background: var(--progress-bg); color: var(--text); opacity:.7; font-style: italic; }
+.achievements li.completed { background: var(--secondary); color: #000; }
+
+/* ==============================================
+   SECTION FIN
+============================================== */
+.end-game-section { background: var(--card); border-radius: var(--radius-sm); padding: 16px; margin-top: 20px; }
+.end-game-section h2 { color: var(--secondary); margin-bottom: 10px; font-family: "Bebas Neue"; }
+.end-game-section p { font-size: 1.1rem; margin-bottom: 12px; font-weight: 700; }
+
+/* ==============================================
+   CODES PROMO
+============================================== */
+.codes-display { background: var(--card); border-radius: var(--radius-sm); padding: 16px; margin-top: 16px; }
+.codes-display h2 { color: var(--primary); font-family: "Bebas Neue"; margin-bottom: 8px; font-size: 1.8rem; }
+.codes-display ul { list-style:none; text-align:center; }
+.codes-display li { background: var(--bg); margin: 6px 0; padding: 10px; border-radius: 6px; font-size: 1.2rem; font-weight: 700; }
+
+/* ==============================================
+   BOTTOM BUTTONS
+============================================== */
+.bottom-buttons { margin-top: 20px; display:flex; justify-content:center; gap: 12px; flex-wrap: wrap; }
+
+/* ==============================================
+   CLICK ANIM
+============================================== */
+.click-anim {
+  position: absolute; pointer-events:none; font-weight: 700; color: #fff;
+  text-shadow: 0 1px 2px rgba(0,0,0,.5);
+  animation: flyUp 900ms forwards ease-out;
+  font-size: 1.1rem; z-index: 9999;
+}
+@keyframes flyUp {
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateY(-50px) scale(.85); opacity: 0; }
+}
+
+/* ==============================================
+   RESPONSIVE
+============================================== */
+@media (max-width: 800px) {
+  .stats { flex-direction: column; }
+  .resource { width: 100%; }
+  .main-section { flex-direction: column; align-items:center; }
+  .level-bar-container { width: min(520px, 92%); }
+}
+@media (max-width: 500px) {
+  .container { padding: 16px; }
+  .title-game { font-size: 2rem; }
+  #actionLabel { font-size: .85rem; }
+  .upgrade { flex-direction: column; align-items:flex-start; }
+  .upgrade-price { margin-top: 4px; }
+}
